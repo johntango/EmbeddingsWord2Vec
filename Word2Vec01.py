@@ -1,19 +1,27 @@
-import pandas as pd
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
 import numpy as np
+import pandas as pd
 from gensim.models import Word2Vec
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_absolute_error, mean_squared_error
-from nltk.tokenize import word_tokenize
-from nltk.corpus import stopwords
+
+
+import nltk
+nltk.download('stopwords')
 
 # Assuming df is your DataFrame and it has columns 'advert', 'price', 'rooms', 'footage'
 df = pd.read_csv('your_data.csv')
+print(df.head())
 
 # Preprocess and tokenize the text
 stop_words = set(stopwords.words('english'))
+print(stop_words)
 df['tokenized_advert'] = df['advert'].apply(lambda x: [word for word in word_tokenize(
     x.lower()) if word.isalpha() and word not in stop_words])
+
+df['tokenized_advert'].head()
 
 # Train Word2Vec model
 word2vec_model = Word2Vec(
@@ -41,6 +49,9 @@ y_test = test_df['price'].values
 # Train the model
 model = RandomForestRegressor(n_estimators=100, random_state=42)
 model.fit(X_train, y_train)
+# coverage of model print ("model score: model.score(X_train, y_train))
+print(f"Test score: {model.score(X_train, y_train)}")
+print(model.score(X_train, y_train))
 
 # Predict on test data
 y_pred = model.predict(X_test)
