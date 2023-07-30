@@ -26,6 +26,7 @@ df['tokenized_advert'].head()
 # Train Word2Vec model
 word2vec_model = Word2Vec(
     df['tokenized_advert'].to_list(), vector_size=100, min_count=2, window=5)
+# save the Word2Vec model to file Word2Vec.save("model_file_path")
 
 # Create document vectors by averaging word vectors for each advert
 df['doc_vector'] = df['tokenized_advert'].apply(lambda x: np.mean(
@@ -61,3 +62,5 @@ mae = mean_absolute_error(y_test, y_pred)
 mse = mean_squared_error(y_test, y_pred)
 
 print(f"Mean Absolute Error: {mae}, Mean Squared Error: {mse}")
+# save the Word2Vec model to file Word2Vec.save("model_file_path")
+word2vec_model.save("W2Vec_model")
